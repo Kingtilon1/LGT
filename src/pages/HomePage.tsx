@@ -240,7 +240,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Projects Showcase - Diagonal sections */}
+      {/* Projects Showcase - Simplified project cards */}
       <section className="py-20 bg-white relative">
         <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-gray-50 to-transparent"></div>
         <div className="absolute -top-10 right-0 w-1/2 h-40 bg-gradient-orange-blue opacity-5 transform -rotate-6"></div>
@@ -269,12 +269,8 @@ const HomePage: React.FC = () => {
               className="col-span-1 flex flex-col"
             >
               <div className="rounded-lg overflow-hidden shadow-xl group h-64 md:h-80 relative mb-6">
-                <div className="h-full w-full flex flex-col items-center justify-center p-6 text-white bg-gray-900 transition-transform group-hover:scale-105 duration-500">
-                  <h4 className="text-lg font-medium mb-2">Multi-Camera System</h4>
-                  <p className="text-sm text-center text-gray-300">High-definition security coverage for complete building monitoring</p>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
-                  <div className="p-6 text-white">
+                <div className="h-full w-full flex flex-col justify-end p-6 text-white bg-gray-900">
+                  <div>
                     <h3 className="text-xl font-semibold mb-2">Office Security System</h3>
                     <p className="text-white/80 text-sm mb-3">
                       Complete security camera installation for a commercial office building
@@ -299,13 +295,10 @@ const HomePage: React.FC = () => {
                 <p className="text-white/80 mb-4">
                   We pride ourselves on creating tailored solutions for each client's unique needs
                 </p>
-                <Link to="/services" className="text-white inline-flex items-center group font-medium hover:text-white/80">
-                  Our Approach
-                  <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                </Link>
               </motion.div>
             </motion.div>
             
+            {/* Smart Home Integration Card */}
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -314,13 +307,8 @@ const HomePage: React.FC = () => {
               className="col-span-1 md:mt-10"
             >
               <div className="rounded-lg overflow-hidden shadow-xl group h-full relative">
-                <div className="bg-gradient-to-br from-blue-900 to-indigo-900 h-full w-full flex flex-col items-center justify-center p-6 text-white transition-transform group-hover:scale-105 duration-500">
-                  <ServiceIcon name="home" size={48} className="mb-4 text-lgt-orange" />
-                  <h4 className="text-lg font-medium mb-2">Smart Home Ecosystem</h4>
-                  <p className="text-sm text-center text-gray-300">Centralized control of lighting, climate, security and entertainment</p>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
-                  <div className="p-6 text-white">
+                <div className="h-full w-full flex flex-col justify-end p-6 text-white bg-blue-900">
+                  <div>
                     <h3 className="text-xl font-semibold mb-2">Smart Home Integration</h3>
                     <p className="text-white/80 text-sm mb-3">
                       Full home automation system with integrated security and climate control
@@ -356,12 +344,8 @@ const HomePage: React.FC = () => {
               </motion.div>
               
               <div className="rounded-lg overflow-hidden shadow-xl group h-64 md:h-80 relative">
-                <div className="h-full w-full flex flex-col items-center justify-center p-6 text-white bg-red-900 transition-transform group-hover:scale-105 duration-500">
-                  <h4 className="text-lg font-medium mb-2">Secure Access Control</h4>
-                  <p className="text-sm text-center text-gray-300">Multi-point authentication for enhanced security management</p>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
-                  <div className="p-6 text-white">
+                <div className="h-full w-full flex flex-col justify-end p-6 text-white bg-red-900">
+                  <div>
                     <h3 className="text-xl font-semibold mb-2">Retail Access Control</h3>
                     <p className="text-white/80 text-sm mb-3">
                       Access control system with advanced authentication for retail chain
