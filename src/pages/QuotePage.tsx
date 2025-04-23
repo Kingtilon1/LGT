@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -57,16 +56,63 @@ const QuotePage: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      console.log('Quote request submitted:', formData);
+    try {
+      // Format the services needed as a readable list
+      const selectedServices = Object.entries(formData.servicesNeeded)
+        .filter(([_, isSelected]) => isSelected)
+        .map(([service]) => {
+          // Convert camelCase to readable format
+          return service
+            .replace(/([A-Z])/g, ' $1')
+            .replace(/^./, str => str.toUpperCase());
+        })
+        .join(', ');
+      
+      // Format email content
+      const emailContent = `
+New Quote Request from: ${formData.name}
+----------------------------------
+Contact Information:
+----------------------------------
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+
+----------------------------------
+Project Location:
+----------------------------------
+Address: ${formData.address}
+City: ${formData.city}
+
+----------------------------------
+Project Details:
+----------------------------------
+Project Type: ${formData.projectType}
+Services Needed: ${selectedServices || 'None selected'}
+Budget Range: ${formData.budget}
+Timeline: ${formData.timeline}
+Details: ${formData.details}
+      `;
+
+      // In a real implementation, we would send this to a server
+      // Since we don't have a backend, we'll simulate sending via mailto
+      const mailtoLink = `mailto:LGTechnical608@gmail.com?subject=New Quote Request from ${
+        encodeURIComponent(formData.name)
+      }&body=${
+        encodeURIComponent(emailContent)
+      }`;
+
+      // Open the email client with the pre-filled data
+      window.open(mailtoLink, '_blank');
+      
+      console.log('Quote request prepared for email:', formData);
       toast({
-        title: "Quote Request Submitted!",
-        description: "Thank you for your request. We'll prepare your quote and contact you soon.",
+        title: "Quote Request Prepared!",
+        description: "Your email client has opened with the quote details. Please review and send the email.",
       });
       
       // Reset form
@@ -90,10 +136,19 @@ const QuotePage: React.FC = () => {
         },
       });
       
+    } catch (error) {
+      console.error('Error preparing quote email:', error);
+      toast({
+        title: "Error",
+        description: "There was an issue preparing your quote request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
+  
   return (
     <Layout>
       <PageBanner

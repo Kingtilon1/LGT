@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Zap, Briefcase, Monitor, Wand2 } from 'lucide-react';
@@ -270,8 +269,10 @@ const HomePage: React.FC = () => {
               className="col-span-1 flex flex-col"
             >
               <div className="rounded-lg overflow-hidden shadow-xl group h-64 md:h-80 relative mb-6">
-                <div className="bg-gray-200 h-full w-full flex items-center justify-center transition-transform group-hover:scale-105 duration-500">
-                  <span className="text-gray-500">Project Image</span>
+                <div className="bg-gradient-to-br from-gray-800 to-gray-900 h-full w-full flex flex-col items-center justify-center p-6 text-white transition-transform group-hover:scale-105 duration-500">
+                  <ServiceIcon name="camera" size={48} className="mb-4 text-lgt-orange" />
+                  <h4 className="text-lg font-medium mb-2">Multi-Camera System</h4>
+                  <p className="text-sm text-center text-gray-300">High-definition security coverage for complete building monitoring</p>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
                   <div className="p-6 text-white">
@@ -314,8 +315,10 @@ const HomePage: React.FC = () => {
               className="col-span-1 md:mt-10"
             >
               <div className="rounded-lg overflow-hidden shadow-xl group h-full relative">
-                <div className="bg-gray-200 h-full w-full flex items-center justify-center transition-transform group-hover:scale-105 duration-500">
-                  <span className="text-gray-500">Project Image</span>
+                <div className="bg-gradient-to-br from-blue-900 to-indigo-900 h-full w-full flex flex-col items-center justify-center p-6 text-white transition-transform group-hover:scale-105 duration-500">
+                  <ServiceIcon name="home" size={48} className="mb-4 text-lgt-orange" />
+                  <h4 className="text-lg font-medium mb-2">Smart Home Ecosystem</h4>
+                  <p className="text-sm text-center text-gray-300">Centralized control of lighting, climate, security and entertainment</p>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
                   <div className="p-6 text-white">
@@ -358,8 +361,10 @@ const HomePage: React.FC = () => {
               </motion.div>
               
               <div className="rounded-lg overflow-hidden shadow-xl group h-64 md:h-80 relative">
-                <div className="bg-gray-200 h-full w-full flex items-center justify-center transition-transform group-hover:scale-105 duration-500">
-                  <span className="text-gray-500">Project Image</span>
+                <div className="bg-gradient-to-br from-orange-800 to-red-900 h-full w-full flex flex-col items-center justify-center p-6 text-white transition-transform group-hover:scale-105 duration-500">
+                  <ServiceIcon name="fingerprint" size={48} className="mb-4 text-white" />
+                  <h4 className="text-lg font-medium mb-2">Biometric Access</h4>
+                  <p className="text-sm text-center text-gray-300">Secure multi-point access control with fingerprint and facial recognition</p>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
                   <div className="p-6 text-white">
