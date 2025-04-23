@@ -4,14 +4,12 @@ import Layout from '@/components/Layout';
 import PageBanner from '@/components/PageBanner';
 import CtaSection from '@/components/CtaSection';
 
-// Mock project data
 const projects = [
   {
     id: 1,
     title: 'Commercial Office Security',
     category: 'security',
     description: 'Complete security camera system installation for a multi-story office building in Manhattan.',
-    image: '/placeholder.svg',
     challenge: 'Installing a comprehensive security system in a busy office without disrupting daily operations.',
     solution: 'Strategic scheduling and phased implementation to minimize disruption while providing complete coverage.'
   },
@@ -20,7 +18,6 @@ const projects = [
     title: 'Residential Smart Home',
     category: 'smart-building',
     description: 'Full smart home integration for a luxury residence in Brooklyn, including climate control, security, and entertainment systems.',
-    image: '/placeholder.svg',
     challenge: 'Integrating multiple systems into a single, user-friendly interface.',
     solution: 'Custom programming and system design to create a seamless user experience across all platforms.'
   },
@@ -29,7 +26,6 @@ const projects = [
     title: 'Retail Chain Access Control',
     category: 'access-control',
     description: 'Biometric access control system for a chain of retail stores throughout New York City.',
-    image: '/placeholder.svg',
     challenge: 'Creating a unified system that could be centrally managed across multiple locations.',
     solution: 'Cloud-based management system with local redundancies to ensure consistent operation.'
   },
@@ -38,7 +34,6 @@ const projects = [
     title: 'Restaurant Audio/Visual System',
     category: 'low-voltage',
     description: 'Complete A/V system installation for an upscale restaurant including background music and digital signage.',
-    image: '/placeholder.svg',
     challenge: 'Designing a system that provided quality sound throughout various dining areas while remaining unobtrusive.',
     solution: 'Strategic speaker placement and zone controls to create the perfect ambiance in each area.'
   },
@@ -47,7 +42,6 @@ const projects = [
     title: 'Hotel Network Infrastructure',
     category: 'cabling',
     description: 'Complete network cabling infrastructure for a new boutique hotel, including guest WiFi and back-end systems.',
-    image: '/placeholder.svg',
     challenge: 'Installing network infrastructure that could handle high demand from guests while maintaining security.',
     solution: 'Segmented network design with dedicated systems for operations and guest access.'
   },
@@ -56,7 +50,6 @@ const projects = [
     title: 'Custom Home Theater',
     category: 'handyman',
     description: 'Design and installation of a high-end home theater system with automated lighting and sound controls.',
-    image: '/placeholder.svg',
     challenge: 'Creating a theater-quality experience in a residential setting.',
     solution: 'Custom acoustic treatments and professional-grade equipment integration.'
   },
@@ -163,16 +156,9 @@ const ProjectsPage: React.FC = () => {
           {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project) => (
-              <div key={project.id} className="bg-white rounded-lg overflow-hidden shadow-md">
-                <div className="h-56 bg-gray-200 flex items-center justify-center">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover" 
-                  />
-                </div>
+              <div key={project.id} className="bg-gradient-to-br from-white to-gray-50 rounded-lg overflow-hidden shadow-md border border-gray-100 hover:shadow-xl transition-shadow">
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                  <h3 className="text-xl font-semibold mb-2 text-lgt-dark">{project.title}</h3>
                   <p className="text-lgt-gray mb-4">{project.description}</p>
                   
                   <div className="mb-4">

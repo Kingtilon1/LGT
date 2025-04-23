@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, ExternalLink, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
@@ -9,7 +8,6 @@ interface ServiceCardProps {
   title: string;
   description: string;
   icon: React.ReactNode;
-  path: string;
   className?: string;
   index?: number;
 }
@@ -18,7 +16,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   title,
   description,
   icon,
-  path,
   className,
   index = 0,
 }) => {
@@ -70,15 +67,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           {description}
         </p>
         
-        <div className="mt-auto flex gap-4">
-          <Link
-            to={path}
-            className="inline-flex items-center text-lgt-orange font-medium hover:text-lgt-blue transition-colors"
-          >
-            Learn More
-            <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-          </Link>
-          
+        <div className="mt-auto">
           <button 
             onClick={toggleExpand}
             className="lg:flex hidden items-center text-lgt-gray hover:text-lgt-orange transition-colors"
