@@ -269,7 +269,7 @@ const HomePage: React.FC = () => {
               className="col-span-1 flex flex-col"
             >
               <div className="rounded-lg overflow-hidden shadow-xl group h-64 md:h-80 relative mb-6">
-                <div className="bg-gradient-to-br from-gray-800 to-gray-900 h-full w-full flex flex-col items-center justify-center p-6 text-white transition-transform group-hover:scale-105 duration-500">
+                <div className="h-full w-full flex flex-col items-center justify-center p-6 text-white bg-gray-900 transition-transform group-hover:scale-105 duration-500">
                   <h4 className="text-lg font-medium mb-2">Multi-Camera System</h4>
                   <p className="text-sm text-center text-gray-300">High-definition security coverage for complete building monitoring</p>
                 </div>
@@ -353,14 +353,10 @@ const HomePage: React.FC = () => {
                 <p className="text-white/80 mb-4">
                   Access and control your systems from anywhere with our remote monitoring solutions
                 </p>
-                <Link to="/services/security" className="text-lgt-orange inline-flex items-center group font-medium hover:text-lgt-orange/80">
-                  Learn More
-                  <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                </Link>
               </motion.div>
               
               <div className="rounded-lg overflow-hidden shadow-xl group h-64 md:h-80 relative">
-                <div className="bg-gradient-to-br from-red-800 to-red-900 h-full w-full flex flex-col items-center justify-center p-6 text-white transition-transform group-hover:scale-105 duration-500">
+                <div className="h-full w-full flex flex-col items-center justify-center p-6 text-white bg-red-900 transition-transform group-hover:scale-105 duration-500">
                   <h4 className="text-lg font-medium mb-2">Secure Access Control</h4>
                   <p className="text-sm text-center text-gray-300">Multi-point authentication for enhanced security management</p>
                 </div>
