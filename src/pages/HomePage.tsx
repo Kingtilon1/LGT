@@ -270,7 +270,6 @@ const HomePage: React.FC = () => {
             >
               <div className="rounded-lg overflow-hidden shadow-xl group h-64 md:h-80 relative mb-6">
                 <div className="bg-gradient-to-br from-gray-800 to-gray-900 h-full w-full flex flex-col items-center justify-center p-6 text-white transition-transform group-hover:scale-105 duration-500">
-                  <ServiceIcon name="camera" size={48} className="mb-4 text-lgt-orange" />
                   <h4 className="text-lg font-medium mb-2">Multi-Camera System</h4>
                   <p className="text-sm text-center text-gray-300">High-definition security coverage for complete building monitoring</p>
                 </div>
@@ -361,18 +360,17 @@ const HomePage: React.FC = () => {
               </motion.div>
               
               <div className="rounded-lg overflow-hidden shadow-xl group h-64 md:h-80 relative">
-                <div className="bg-gradient-to-br from-orange-800 to-red-900 h-full w-full flex flex-col items-center justify-center p-6 text-white transition-transform group-hover:scale-105 duration-500">
-                  <ServiceIcon name="fingerprint" size={48} className="mb-4 text-white" />
-                  <h4 className="text-lg font-medium mb-2">Biometric Access</h4>
-                  <p className="text-sm text-center text-gray-300">Secure multi-point access control with fingerprint and facial recognition</p>
+                <div className="bg-gradient-to-br from-red-800 to-red-900 h-full w-full flex flex-col items-center justify-center p-6 text-white transition-transform group-hover:scale-105 duration-500">
+                  <h4 className="text-lg font-medium mb-2">Secure Access Control</h4>
+                  <p className="text-sm text-center text-gray-300">Multi-point authentication for enhanced security management</p>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end">
                   <div className="p-6 text-white">
                     <h3 className="text-xl font-semibold mb-2">Retail Access Control</h3>
                     <p className="text-white/80 text-sm mb-3">
-                      Access control system with biometric authentication for a retail chain
+                      Access control system with advanced authentication for retail chain
                     </p>
-                    <Link to="/projects" className="text-lgt-orange inline-flex items-center group">
+                    <Link to="/projects" className="text-white inline-flex items-center group">
                       View Project
                       <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
                     </Link>
