@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/components/ui/use-toast';
 import Layout from '@/components/Layout';
 import PageBanner from '@/components/PageBanner';
+import { supabase } from '@/integrations/supabase/client';
 
 const QuotePage: React.FC = () => {
   const { toast } = useToast();
@@ -61,58 +62,28 @@ const QuotePage: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      // Format the services needed as a readable list
+      // Format services needed as an array of strings
       const selectedServices = Object.entries(formData.servicesNeeded)
         .filter(([_, isSelected]) => isSelected)
         .map(([service]) => {
-          // Convert camelCase to readable format
           return service
             .replace(/([A-Z])/g, ' $1')
             .replace(/^./, str => str.toUpperCase());
-        })
-        .join(', ');
-      
-      // Format email content
-      const emailContent = `
-New Quote Request from: ${formData.name}
-----------------------------------
-Contact Information:
-----------------------------------
-Name: ${formData.name}
-Email: ${formData.email}
-Phone: ${formData.phone}
+        });
 
-----------------------------------
-Project Location:
-----------------------------------
-Address: ${formData.address}
-City: ${formData.city}
+      // Send the quote request to our edge function
+      const { error } = await supabase.functions.invoke('send-quote', {
+        body: {
+          ...formData,
+          servicesNeeded: selectedServices,
+        },
+      });
 
-----------------------------------
-Project Details:
-----------------------------------
-Project Type: ${formData.projectType}
-Services Needed: ${selectedServices || 'None selected'}
-Budget Range: ${formData.budget}
-Timeline: ${formData.timeline}
-Details: ${formData.details}
-      `;
+      if (error) throw error;
 
-      // In a real implementation, we would send this to a server
-      // Since we don't have a backend, we'll simulate sending via mailto
-      const mailtoLink = `mailto:LGTechnical608@gmail.com?subject=New Quote Request from ${
-        encodeURIComponent(formData.name)
-      }&body=${
-        encodeURIComponent(emailContent)
-      }`;
-
-      // Open the email client with the pre-filled data
-      window.open(mailtoLink, '_blank');
-      
-      console.log('Quote request prepared for email:', formData);
       toast({
-        title: "Quote Request Prepared!",
-        description: "Your email client has opened with the quote details. Please review and send the email.",
+        title: "Quote Request Sent!",
+        description: "We'll review your request and get back to you soon. Check your email for confirmation.",
       });
       
       // Reset form
@@ -137,10 +108,10 @@ Details: ${formData.details}
       });
       
     } catch (error) {
-      console.error('Error preparing quote email:', error);
+      console.error('Error sending quote request:', error);
       toast({
         title: "Error",
-        description: "There was an issue preparing your quote request. Please try again.",
+        description: "There was an issue sending your quote request. Please try again or contact us directly.",
         variant: "destructive",
       });
     } finally {
