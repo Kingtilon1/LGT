@@ -37,7 +37,8 @@ const handler = async (req: Request): Promise<Response> => {
       .map(service => `• ${service}`)
       .join('\n');
 
-    const emailResponse = await resend.emails.send({
+    // Send email to business
+    const businessEmailResponse = await resend.emails.send({
       from: "LG Technical <onboarding@resend.dev>",
       to: ["LGTechnical608@gmail.com"],
       subject: `New Quote Request from ${quoteData.name}`,
@@ -65,7 +66,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     // Send confirmation email to the customer
-    await resend.emails.send({
+    const customerEmailResponse = await resend.emails.send({
       from: "LG Technical <onboarding@resend.dev>",
       to: [quoteData.email],
       subject: "We've Received Your Quote Request",
@@ -85,9 +86,14 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Emails sent successfully:", emailResponse);
+    console.log("Business Email Response:", businessEmailResponse);
+    console.log("Customer Email Response:", customerEmailResponse);
 
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ 
+      success: true, 
+      businessEmailStatus: businessEmailResponse.id,
+      customerEmailStatus: customerEmailResponse.id 
+    }), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
@@ -97,10 +103,16 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error in send-quote function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        success: false 
+      }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+        headers: { 
+          "Content-Type": "application/json", 
+          ...corsHeaders 
+        },
       }
     );
   }
