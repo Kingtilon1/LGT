@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/components/ui/use-toast';
 import Layout from '@/components/Layout';
 import PageBanner from '@/components/PageBanner';
-import { supabase } from '@/integrations/supabase/client';
+import emailjs from '@emailjs/browser';
+
+// Extract Vite env vars (must start with VITE_)
+const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID!;
+const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID!;
+const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY!;
 
 const QuotePage: React.FC = () => {
   const { toast } = useToast();
@@ -15,7 +26,6 @@ const QuotePage: React.FC = () => {
     name: '',
     email: '',
     phone: '',
-    address: '',
     city: '',
     projectType: '',
     budget: '',
@@ -32,66 +42,71 @@ const QuotePage: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Initialize EmailJS with publicKey once
+  useEffect(() => {
+    emailjs.init(publicKey);
+  }, []);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleCheckboxChange = (service: keyof typeof formData.servicesNeeded, checked: boolean) => {
+  const handleCheckboxChange = (
+    service: keyof typeof formData.servicesNeeded,
+    checked: boolean
+  ) => {
     setFormData(prev => ({
       ...prev,
       servicesNeeded: {
         ...prev.servicesNeeded,
-        [service]: checked
-      }
+        [service]: checked,
+      },
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
+    // Prepare services list
+    const selectedServices = Object.entries(formData.servicesNeeded)
+      .filter(([_, selected]) => selected)
+      .map(([key]) => key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()));
+
+    // Map to EmailJS template variable names
+    const templateParams = {
+      to_name: 'LGT',      // matches {{to_name}}
+      name: formData.name,           // matches {{from_name}}
+      email: formData.email,         // matches {{email}}           // matches {{reply_to}}
+      phone: formData.phone,
+      city: formData.city,
+      project_type: formData.projectType,
+      services: selectedServices.join(', '),
+      budget: formData.budget,
+      timeline: formData.timeline,
+      message: formData.details,          // matches {{message}}
+    };
+
     try {
-      // Format services needed as an array of strings
-      const selectedServices = Object.entries(formData.servicesNeeded)
-        .filter(([_, isSelected]) => isSelected)
-        .map(([service]) => {
-          return service
-            .replace(/([A-Z])/g, ' $1')
-            .replace(/^./, str => str.toUpperCase());
-        });
-
-      // Send the quote request to our edge function
-      const { error } = await supabase.functions.invoke('send-quote', {
-        body: {
-          ...formData,
-          servicesNeeded: selectedServices,
-        },
-      });
-
-      if (error) throw error;
-
+      await emailjs.send(serviceId, templateId, templateParams);
       toast({
-        title: "Quote Request Sent!",
-        description: "We'll review your request and get back to you soon. Check your email for confirmation.",
+        title: 'Quote Request Sent!',
+        description:
+          "We'll review your request and get back to you soon. Check your email for confirmation.",
       });
-      
+
       // Reset form
       setFormData({
         name: '',
         email: '',
         phone: '',
-        address: '',
         city: '',
         projectType: '',
         budget: '',
@@ -106,20 +121,19 @@ const QuotePage: React.FC = () => {
           handyman: false,
         },
       });
-      
     } catch (error) {
       console.error('Error sending quote request:', error);
       toast({
-        title: "Error",
-        description: "There was an issue sending your quote request. Please try again or contact us directly.",
-        variant: "destructive",
+        title: 'Error',
+        description:
+          'There was an issue sending your quote request. Please try again or contact us directly.',
+        variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  
   return (
     <Layout>
       <PageBanner
@@ -131,7 +145,7 @@ const QuotePage: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
                 <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -184,18 +198,7 @@ const QuotePage: React.FC = () => {
                 <h2 className="text-xl font-semibold mb-4">Project Location</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <label htmlFor="address" className="block text-sm font-medium text-lgt-dark mb-1">
-                      Address
-                    </label>
-                    <Input
-                      id="address"
-                      name="address"
-                      placeholder="Enter your address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                    />
-                  </div>
+                  
                   
                   <div>
                     <label htmlFor="city" className="block text-sm font-medium text-lgt-dark mb-1">
@@ -369,19 +372,17 @@ const QuotePage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="text-center">
                 <p className="text-sm text-lgt-gray mb-4">
-                  By submitting this form, you agree to be contacted regarding your request. 
-                  We'll prepare a detailed quote based on the information provided.
+                  By submitting this form, you agree to be contacted regarding your request. We'll prepare a detailed quote based on the information provided.
                 </p>
-                
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="px-8 py-2 bg-lgt-orange hover:bg-orange-600 text-lg"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit Quote Request'}
+                  {isSubmitting ? 'Submitting…' : 'Submit Quote Request'}
                 </Button>
               </div>
             </form>

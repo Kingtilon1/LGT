@@ -1,19 +1,14 @@
-// For Node.js environment
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
 
-// Load environment variables
-dotenv.config();
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Resend } from "npm:resend@2.0.0";
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
-const EMAIL_JS_SERVICE_ID = process.env.EMAIL_JS_SERVICE_ID || "service_w5sesos";
-const EMAIL_JS_USER_ID = process.env.EMAIL_JS_USER_ID;
-const EMAIL_JS_TEMPLATE_ID = process.env.EMAIL_JS_TEMPLATE_ID;
-const BUSINESS_EMAIL = process.env.BUSINESS_EMAIL || "bobbtilon@gmail.com";
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 
 interface QuoteRequest {
   name: string;
@@ -28,124 +23,99 @@ interface QuoteRequest {
   details: string;
 }
 
-app.post('/api/send-quote', async (req, res) => {
+const handler = async (req: Request): Promise<Response> => {
+  // Handle CORS preflight requests
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
   try {
-    const quoteData: QuoteRequest = req.body;
+    const quoteData: QuoteRequest = await req.json();
     
     // Format services as a bulleted list
     const servicesList = quoteData.servicesNeeded
       .map(service => `• ${service}`)
       .join('\n');
-    
-    // Format message for the template
-    const message = `
-Project Type: ${quoteData.projectType}
-Address: ${quoteData.address}, ${quoteData.city}
-Phone: ${quoteData.phone}
-Email: ${quoteData.email}
-Services Needed: 
-${servicesList}
-Budget: ${quoteData.budget}
-Timeline: ${quoteData.timeline}
 
-Additional Details:
-${quoteData.details}
-    `;
-
-    // Prepare the business email data
-    const businessEmailData = {
-      service_id: EMAIL_JS_SERVICE_ID,
-      template_id: EMAIL_JS_TEMPLATE_ID,
-      user_id: EMAIL_JS_USER_ID,
-      template_params: {
-        // Template specific fields
-        name: quoteData.name,
-        time: new Date().toLocaleString(),
-        message: message,
+    // Send email to business
+    const businessEmailResponse = await resend.emails.send({
+      from: "LG Technical <onboarding@resend.dev>",
+      to: ["bobbtilon@gmail.com"],
+      subject: `New Quote Request from ${quoteData.name}`,
+      html: `
+        <h1>New Quote Request</h1>
+        <h2>Contact Information:</h2>
+        <p><strong>Name:</strong> ${quoteData.name}</p>
+        <p><strong>Email:</strong> ${quoteData.email}</p>
+        <p><strong>Phone:</strong> ${quoteData.phone}</p>
         
-        // Email routing fields
-        to_email: BUSINESS_EMAIL,
-        from_name: quoteData.name,
-        from_email: quoteData.email,
-        reply_to: quoteData.email,
-        subject: `New Quote Request from ${quoteData.name}`
-      }
-    };
-
-    // Also prepare a confirmation email to the customer
-    const customerEmailData = {
-      service_id: EMAIL_JS_SERVICE_ID,
-      template_id: EMAIL_JS_TEMPLATE_ID, // You might want a separate template for this
-      user_id: EMAIL_JS_USER_ID,
-      template_params: {
-        name: "LG Technical",
-        time: new Date().toLocaleString(),
-        message: `
-Thank you for your quote request! We have received your information and our team will review it shortly. We typically respond within 1-2 business days.
-
-Here's a summary of your request:
-- Project Type: ${quoteData.projectType}
-- Services Requested: ${quoteData.servicesNeeded.join(", ")}
-- Preferred Timeline: ${quoteData.timeline}
-
-If you have any immediate questions, feel free to call us at:
-(347) 595-4221 or (929) 743-2705
-
-Best regards,
-The LG Technical Team
-        `,
-        to_email: quoteData.email,
-        from_name: "LG Technical",
-        from_email: BUSINESS_EMAIL,
-        reply_to: BUSINESS_EMAIL,
-        subject: "We've Received Your Quote Request"
-      }
-    };
-
-    // Send business notification email
-    const businessEmailResponse = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(businessEmailData)
+        <h2>Project Location:</h2>
+        <p><strong>Address:</strong> ${quoteData.address}</p>
+        <p><strong>City:</strong> ${quoteData.city}</p>
+        
+        <h2>Project Details:</h2>
+        <p><strong>Project Type:</strong> ${quoteData.projectType}</p>
+        <p><strong>Services Needed:</strong></p>
+        <pre>${servicesList}</pre>
+        <p><strong>Budget Range:</strong> ${quoteData.budget}</p>
+        <p><strong>Timeline:</strong> ${quoteData.timeline}</p>
+        
+        <h2>Additional Details:</h2>
+        <p>${quoteData.details}</p>
+      `,
     });
-    
-    if (!businessEmailResponse.ok) {
-      throw new Error(`EmailJS business email error: ${await businessEmailResponse.text()}`);
-    }
 
-    // Send customer confirmation email
-    const customerEmailResponse = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(customerEmailData)
+    // Send confirmation email to the customer
+    const customerEmailResponse = await resend.emails.send({
+      from: "LG Technical <onboarding@resend.dev>",
+      to: [quoteData.email],
+      subject: "We've Received Your Quote Request",
+      html: `
+        <h1>Thank you for your quote request!</h1>
+        <p>Dear ${quoteData.name},</p>
+        <p>We have received your quote request and our team will review it shortly. We typically respond within 1-2 business days.</p>
+        <p>Here's a summary of your request:</p>
+        <ul>
+          <li>Project Type: ${quoteData.projectType}</li>
+          <li>Services Requested: ${quoteData.servicesNeeded.join(", ")}</li>
+          <li>Preferred Timeline: ${quoteData.timeline}</li>
+        </ul>
+        <p>If you have any immediate questions, feel free to call us at:</p>
+        <p>(347) 595-4221 or (929) 743-2705</p>
+        <p>Best regards,<br>The LG Technical Team</p>
+      `,
     });
-    
-    if (!customerEmailResponse.ok) {
-      throw new Error(`EmailJS customer email error: ${await customerEmailResponse.text()}`);
-    }
 
-    console.log("Business Email Response:", businessEmailResponse.status);
-    console.log("Customer Email Response:", customerEmailResponse.status);
+    console.log("Business Email Response:", businessEmailResponse);
+    console.log("Customer Email Response:", customerEmailResponse);
 
-    res.status(200).json({ 
+    return new Response(JSON.stringify({ 
       success: true, 
-      businessEmailStatus: businessEmailResponse.status,
-      customerEmailStatus: customerEmailResponse.status 
+      businessEmailStatus: businessEmailResponse.id,
+      customerEmailStatus: customerEmailResponse.id 
+    }), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        ...corsHeaders,
+      },
     });
   } catch (error: any) {
     console.error("Error in send-quote function:", error);
-    res.status(500).json({ 
-      error: error.message,
-      success: false 
-    });
+    return new Response(
+      JSON.stringify({ 
+        error: error.message,
+        success: false 
+      }),
+      {
+        status: 500,
+        headers: { 
+          "Content-Type": "application/json", 
+          ...corsHeaders 
+        },
+      }
+    );
   }
-});
+};
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+serve(handler);
