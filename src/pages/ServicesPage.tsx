@@ -121,13 +121,7 @@ const ServicesPage: React.FC = () => {
                   </ul>
                 </div>
                 
-                <Link
-                  to={service.path}
-                  className="inline-flex items-center text-lgt-orange font-medium hover:text-lgt-blue transition-colors mt-2"
-                >
-                  Learn More
-                  <ArrowRight size={16} className="ml-1" />
-                </Link>
+                
               </div>
             ))}
           </div>
