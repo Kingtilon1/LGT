@@ -103,7 +103,7 @@ const HomePage: React.FC = () => {
                   <ArrowRight size={16} className="ml-2" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+              <Button asChild variant="outline" size="lg" className="border-white text-lgt-orange hover:bg-white/10">
                 <Link to="/services">Explore Services</Link>
               </Button>
             </motion.div>
@@ -114,7 +114,7 @@ const HomePage: React.FC = () => {
               transition={{ duration: 0.8, delay: 1 }}
               className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/80 text-sm md:block hidden"
             >
-              <div className="flex items-center">
+              <div className="flex items-center text-lgt-orange">
                 <span>Scroll to explore</span>
                 <ArrowRight size={16} className="ml-1 animate-bounce" />
               </div>

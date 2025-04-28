@@ -31,7 +31,7 @@ const CtaSection: React.FC<CtaSectionProps> = ({
           <Button asChild size="lg" className="bg-white text-lgt-orange hover:bg-gray-100">
             <Link to={primaryButtonLink}>{primaryButtonText}</Link>
           </Button>
-          <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10">
+          <Button asChild variant="outline" size="lg" className="border-white text-lgt-orange hover:bg-white/10">
             <Link to={secondaryButtonLink}>{secondaryButtonText}</Link>
           </Button>
         </div>

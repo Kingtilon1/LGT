@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X, ChevronRight } from 'lucide-react';
@@ -18,6 +17,19 @@ const Navbar: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    // Prevent body scrolling when menu is open
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -66,44 +78,44 @@ const Navbar: React.FC = () => {
             </Button>
           </nav>
 
-          {/* Mobile Menu Button - Reimagined interactive hamburger */}
+          {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
             className="lg:hidden z-50 text-lgt-dark hover:text-lgt-orange transition-colors"
             aria-label="Toggle menu"
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMenuOpen ? <X size={24} className="text-white" /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Navigation - Reimagined with visual cues */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 bg-gradient-orange-blue lg:hidden z-40 flex flex-col items-center justify-center animate-fade-in">
-          <nav className="flex flex-col items-center space-y-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className="text-2xl font-medium text-white hover:text-lgt-orange transition-colors transform hover:translate-x-2"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <Button 
-              asChild 
-              className="bg-white text-lgt-orange hover:bg-gray-100 mt-6"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <Link to="/quote" className="flex items-center">
-                Get a Quote
-                <ChevronRight size={16} className="ml-1" />
-              </Link>
-            </Button>
-          </nav>
-        </div>
-      )}
+     {/* Mobile Navigation - This ensures it covers entire screen while keeping logo/X visible */}
+{isMenuOpen && (
+  <div className="fixed inset-0 w-screen h-screen bg-gradient-to-br from-orange-500 to-teal-500 lg:hidden z-40 flex flex-col items-center justify-center">
+    <nav className="flex flex-col items-center space-y-8">
+      {navItems.map((item) => (
+        <Link
+          key={item.name}
+          to={item.path}
+          className="text-2xl font-medium text-white hover:text-white/80 transition-colors transform hover:translate-x-2"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          {item.name}
+        </Link>
+      ))}
+      <Button 
+        asChild 
+        className="bg-white text-lgt-orange hover:bg-gray-100 mt-6"
+        onClick={() => setIsMenuOpen(false)}
+      >
+        <Link to="/quote" className="flex items-center">
+          Get a Quote
+          <ChevronRight size={16} className="ml-1" />
+        </Link>
+      </Button>
+    </nav>
+  </div>
+)}
     </header>
   );
 };

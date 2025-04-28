@@ -15,26 +15,23 @@ const AboutPage: React.FC = () => {
 
       {/* Company Overview */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="section-title">Our Story</h2>
-              <p className="text-lgt-gray mb-6">
-                Founded with a passion for technical excellence, LGT (Let's Get Technical) was established to provide professional low voltage solutions that meet the highest industry standards. Our team brings years of experience in various technical fields, allowing us to offer comprehensive services that solve complex problems.
-              </p>
-              <p className="text-lgt-gray mb-6">
-                What started as a small operation has grown into a trusted provider of technical services throughout the New York metropolitan area. We pride ourselves on our attention to detail, technical knowledge, and commitment to customer satisfaction.
-              </p>
-              <p className="text-lgt-gray">
-                Our mission is simple: to deliver reliable, high-quality technical solutions that exceed our clients' expectations, while maintaining the highest standards of safety and professionalism.
-              </p>
-            </div>
-            <div className="bg-gray-200 h-80 rounded-lg flex items-center justify-center">
-              <span className="text-gray-500">Company Image</span>
-            </div>
-          </div>
-        </div>
-      </section>
+  <div className="container mx-auto px-4">
+    <div className="flex justify-center">
+      <div className="max-w-2xl text-center">
+        <h2 className="section-title">Our Story</h2>
+        <p className="text-lgt-gray mb-6">
+          Founded with a passion for technical excellence, LGT (Let's Get Technical) was established to provide professional low voltage solutions that meet the highest industry standards. Our team brings years of experience in various technical fields, allowing us to offer comprehensive services that solve complex problems.
+        </p>
+        <p className="text-lgt-gray mb-6">
+          What started as a small operation has grown into a trusted provider of technical services throughout the New York metropolitan area. We pride ourselves on our attention to detail, technical knowledge, and commitment to customer satisfaction.
+        </p>
+        <p className="text-lgt-gray">
+          Our mission is simple: to deliver reliable, high-quality technical solutions that exceed our clients' expectations, while maintaining the highest standards of safety and professionalism.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Core Values */}
       <section className="py-16 bg-gray-50">
@@ -90,32 +87,7 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Certifications */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="section-title">Our Certifications</h2>
-            <p className="text-lgt-gray max-w-2xl mx-auto">
-              We're proud to maintain the highest industry standards and certifications.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-8">
-            <div className="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center">
-              <span className="text-gray-500">OSHA</span>
-            </div>
-            <div className="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center">
-              <span className="text-gray-500">Cert #2</span>
-            </div>
-            <div className="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center">
-              <span className="text-gray-500">Cert #3</span>
-            </div>
-            <div className="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center">
-              <span className="text-gray-500">Cert #4</span>
-            </div>
-          </div>
-        </div>
-      </section>
+  
 
       {/* Why Choose Us */}
       <section className="py-16 bg-gray-50">
