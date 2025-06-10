@@ -105,11 +105,11 @@ const InteractiveCtaSection: React.FC = () => {
                     (347) 595-4221
                   </a>
                   <a 
-                    href="tel:+19297432705" 
+                    href="tel:+18483843997" 
                     className="inline-flex items-center justify-center text-lg font-medium text-lgt-orange hover:text-lgt-blue transition-colors"
                   >
                     <Phone size={20} className="mr-2" />
-                    (929) 743-2705
+                    (848) 384-3997
                   </a>
                 </div>
               </div>

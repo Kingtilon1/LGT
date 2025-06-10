@@ -81,7 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
           <li>Preferred Timeline: ${quoteData.timeline}</li>
         </ul>
         <p>If you have any immediate questions, feel free to call us at:</p>
-        <p>(347) 595-4221 or (929) 743-2705</p>
+        <p>(347) 595-4221 or (848) 384-3997</p>
         <p>Best regards,<br>The LG Technical Team</p>
       `,
     });
